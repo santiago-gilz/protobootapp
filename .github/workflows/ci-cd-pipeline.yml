@@ -18,3 +18,6 @@ jobs:
           java-version: "11"
           distribution: "adopt"
           cache: maven
+
+      - name: Build with Maven
+        run: mvn -B install --file pom.xml
