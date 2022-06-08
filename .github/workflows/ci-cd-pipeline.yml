@@ -16,21 +16,20 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: "11"
-          distribution: "adopt"
+          distribution: "temurin"
           cache: maven
 
-      - name: Cache Maven packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
       - name: Build with Maven
-        run: mvn -B install --file pom.xml
+        run: mvn -B clean install --file pom.xml
 
       - name: Upload the result artifacts for this build
         uses: actions/upload-artifact@v3
         with:
           name: protobootapp
           path: target/*.jar
+
+      - name: SonarCloud Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=santiago-gilz_protobootapp -Dsonar.organization=santiago-gilz -Dsonar.host.url=https://sonarcloud.io
