@@ -21,3 +21,9 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B install --file pom.xml
+
+      - name: Upload the result artifacts for this build
+        uses: actions/upload-artifact@v3
+        with:
+          name: protobootapp
+          path: target/*.jar
