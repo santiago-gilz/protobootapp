@@ -22,14 +22,24 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean install --file pom.xml
 
+      - name: SonarCloud Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=santiago-gilz_protobootapp -Dsonar.organization=santiago-gilz -Dsonar.host.url=https://sonarcloud.io
+
       - name: Upload the result artifacts for this build
         uses: actions/upload-artifact@v3
         with:
           name: protobootapp
           path: target/*.jar
 
-      - name: SonarCloud Build and analyze
+      - name: Login to Heroku Container registry
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=santiago-gilz_protobootapp -Dsonar.organization=santiago-gilz -Dsonar.host.url=https://sonarcloud.io
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+      - name: Heroku Build and push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: protobootapp-santiago-gilz
+        run: heroku plugins:install java && heroku deploy:jar target/protobootapp-0.0.1-SNAPSHOT.jar --jdk 11 -Dserver.port=$PORT --app $HEROKU_APP_NAME
