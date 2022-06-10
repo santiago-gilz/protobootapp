@@ -20,7 +20,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B clean install --file pom.xml
+        run: mvn -B install --file pom.xml
 
       - name: SonarCloud Build and analyze
         env:
