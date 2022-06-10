@@ -1,4 +1,4 @@
-package co.edu.eafit.protobootapp;
+package co.edu.perficient.protobootapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

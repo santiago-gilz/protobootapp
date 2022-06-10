@@ -1,4 +1,4 @@
-package co.edu.eafit.protobootapp;
+package co.edu.perficient.protobootapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
