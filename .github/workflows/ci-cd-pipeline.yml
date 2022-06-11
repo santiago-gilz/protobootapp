@@ -3,9 +3,8 @@
 
 name: Java CI/CD pipeline with Maven
 
-on:
-  push:
-    branches: [solution]
+on: push
+  
 jobs:
   build:
     runs-on: ubuntu-latest
